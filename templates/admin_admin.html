@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel - Bus Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f7ff;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+    h2, h3, label {
+      color: #512da8;
+    }
+    .card {
+      border-radius: 12px;
+      border: 1px solid #decaf5;
+      background-color: #ffffff;
+      box-shadow: 0 2px 12px rgba(88, 65, 138, 0.05);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .btn-primary {
+      background-color: #9575cd;
+      border-color: #9575cd;
+    }
+    .btn-primary:hover {
+      background-color: #7e57c2;
+      border-color: #7e57c2;
+    }
+    .btn-success {
+      background-color: #fbc02d;
+      border-color: #fbc02d;
+      color: #4a148c;
+      font-weight: 500;
+    }
+    .btn-success:hover {
+      background-color: #f9a825;
+      border-color: #f9a825;
+    }
+    .table thead {
+      background-color: #d1c4e9;
+      color: #4a148c;
+    }
+    .table tbody tr:hover {
+      background-color: #f3e5f5;
+    }
+    .query-box {
+      border: 1px solid #e1bee7;
+      padding: 1.5rem;
+      border-radius: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 6px rgba(155, 93, 229, 0.08);
+      margin-bottom: 1.5rem;
+    }
+    .alert-success {
+      background-color: #fff9c4;
+      color: #6a1b9a;
+      border-color: #fbc02d;
+    }
+    .reply-box textarea {
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="mb-4">🛠 Admin Panel - Bus Management</h2>
+
+    <!-- Buses Section -->
+    <div id="buses-section">
+      <!-- Add Bus Form -->
+      <form method="POST" class="card mb-5">
+        <div class="mb-3">
+          <label class="form-label">Bus Number</label>
+          <input type="text" name="bus_no" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Route</label>
+          <input type="text" name="route" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Total Seats</label>
+          <input type="number" name="seats" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Departure Time</label>
+          <input type="text" name="departure_time" class="form-control" required />
+        </div>
+        <button class="btn btn-primary">Add Bus</button>
+      </form>
+
+      <!-- Existing Buses -->
+      <h3 class="mb-3">🚌 Existing Buses</h3>
+      <div class="card p-0 mb-5">
+        <table class="table table-bordered table-striped mb-0">
+          <thead>
+            <tr>
+              <th>Bus Number</th>
+              <th>Route</th>
+              <th>Total Seats</th>
+              <th>Departure Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for bus in buses %}
+            <tr>
+              <td>{{ bus.bus_no }}</td>
+              <td>{{ bus.route }}</td>
+              <td>{{ bus.total_seats }}</td>
+              <td>{{ bus.departure_time }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Queries Section -->
+    <div id="queries-section" style="display:none;">
+      <h3 class="mb-3">📩 Student Queries</h3>
+      {% for q in queries %}
+      <div class="query-box">
+        <p><strong>Name:</strong> {{ q.name }}</p>
+        <p><strong>Email:</strong> {{ q.email }}</p>
+        <p><strong>Query:</strong> {{ q.message or q.question }}</p>
+        <p><strong>Submitted At:</strong> {{ q.submitted_at }}</p>
+
+        {% if q.reply %}
+        <div class="alert alert-success mt-3">
+          <strong>Admin Reply:</strong><br />
+          {{ q.reply }}
+        </div>
+        {% else %}
+        <form method="POST" class="reply-box mt-3">
+          <input type="hidden" name="query_id" value="{{ q.id }}" />
+          <div class="mb-2">
+            <label class="form-label">Reply</label>
+            <textarea name="reply" class="form-control" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-success">Send Reply</button>
+        </form>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    function showSection(section) {
+      const busesSection = document.getElementById('buses-section');
+      const queriesSection = document.getElementById('queries-section');
+
+      if (section === 'queries') {
+        busesSection.style.display = 'none';
+        queriesSection.style.display = 'block';
+      } else {
+        // Default to buses
+        busesSection.style.display = 'block';
+        queriesSection.style.display = 'none';
+      }
+    }
+
+    // On page load, show the section based on URL hash
+    window.addEventListener('load', () => {
+      const hash = window.location.hash.substring(1); // remove '#'
+      showSection(hash);
+    });
+
+    // Optional: Listen for hash changes (if user clicks links)
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.substring(1);
+      showSection(hash);
+    });
+  </script>
+</body>
+</html>
+
+
+

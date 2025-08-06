@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(to right, #ede7f6, #f3e5f5);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .dashboard-container {
+      max-width: 1100px;
+      width: 100%;
+      background-color: #fff;
+      padding: 2.5rem 3rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(81, 45, 168, 0.1);
+    }
+
+    .dashboard-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      color: #512da8;
+      margin-bottom: 2.5rem;
+    }
+
+    .card {
+      border-radius: 16px;
+      border: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(135deg, #e1bee7, #d1c4e9);
+      color: #4a148c;
+      text-align: center;
+      padding: 2rem 1rem;
+      height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(74, 20, 140, 0.15);
+    }
+
+    .card .icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: #6a1b9a;
+    }
+
+    .card .card-title {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .card .card-text {
+      font-size: 1.1rem;
+      color: #4a148c;
+      margin-top: 0.5rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-title {
+        font-size: 2rem;
+      }
+      .card .card-title {
+        font-size: 1.5rem;
+      }
+      .card .icon {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2 class="dashboard-title">🛠 Admin Dashboard</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <a href="{{ url_for('admin_admin') }}#buses">
+          <div class="card">
+            <div class="icon">🚌</div>
+            <div class="card-title">{{ total_buses }}</div>
+            <div class="card-text">View / Add Buses</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="{{ url_for('admin_admin') }}#queries">
+          <div class="card">
+            <div class="icon">📩</div>
+            <div class="card-title">{{ total_queries }}</div>
+            <div class="card-text">View Queries</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="{{ url_for('student_attendance') }}">
+          <div class="card">
+            <div class="icon">🧾</div>
+            <div class="card-title">{{ total_checkins }}</div>
+            <div class="card-text">View Attendance</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Smooth scroll to section if URL has anchor
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash === '#buses' || hash === '#queries') {
+        const target = document.querySelector(hash);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

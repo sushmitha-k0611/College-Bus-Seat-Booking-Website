@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Live Seat Updates</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f6ff;
+    }
+
+    .sidebar {
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(180deg, #dcd0ff, #f3e5f5);
+      padding: 2rem 1.2rem;
+      color: #4a148c;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #e1d5f0;
+    }
+
+    .sidebar h4 {
+      margin-bottom: 2rem;
+      color: #5e35b1;
+      font-weight: 600;
+    }
+
+    .nav-link {
+      color: #6a1b9a;
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: #ede7f6;
+      padding-left: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 2.5rem 3rem;
+      overflow-y: auto;
+      max-width: calc(100% - 260px);
+    }
+
+    h2 {
+      color: #512da8;
+      font-weight: 600;
+      font-size: 1.75rem;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card {
+      flex: 1 1 calc(50% - 20px); /* 2 cards per row */
+      min-width: 400px;
+      border-radius: 14px;
+      border: 1px solid #decaf5;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(88, 65, 138, 0.06);
+    }
+
+    .card-header {
+      background-color: #6a5acb;
+      color: #fff;
+      font-weight: 500;
+      border-radius: 14px 14px 0 0;
+      font-size: 1rem;
+    }
+
+    .table {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    .table thead tr {
+      background-color: #d1c4e9 !important;
+      color: #4a148c !important;
+    }
+
+    .table tbody tr {
+      background-color: #f7f3fd;
+      transition: background-color 0.3s;
+    }
+
+    .table tbody tr:hover {
+      background-color: #ede7f6;
+    }
+
+    th, td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main-content {
+        max-width: 100%;
+        padding: 1.5rem;
+      }
+
+      .card {
+        flex: 1 1 100%;
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4>📘 Menu</h4>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('student_dashboard') }}">🎓 Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('student_query') }}">❓ Query</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('student_attendance') }}">🧾 Attendance</a>
+    </li>
+  </ul>
+
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h2 class="mb-4">📊 Live Seat Updates</h2>
+    <div class="card-container">
+      {% for bus in updates %}
+      <div class="card">
+        <div class="card-header">
+          <strong>Bus No:</strong> {{ bus.bus_no }} &nbsp;|&nbsp; 
+          <strong>Route:</strong> {{ bus.route }} &nbsp;|&nbsp; 
+          <strong>Departure:</strong> {{ bus.departure_time }}
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Stop</th>
+                <th>Booked</th>
+                <th>Available</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for stop in bus.stops %}
+              <tr>
+                <td>{{ stop.stop_name }}</td>
+                <td>{{ stop.booked }}</td>
+                <td>{{ stop.available }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+</html>
+
+
+
